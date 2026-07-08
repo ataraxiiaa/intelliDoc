@@ -6,10 +6,12 @@ from embedder import Embedder
 from chunker import Chunker
 from vector_store import VectorStore
 from router import DocumentRouter
+from retriever import Retriever
+from synthesizer import Synthesizer
 import pdfplumber
 from extractors.OCR import OCRExtractor
 from pdf2image import convert_from_path
-
+from evaluator import Evaluator
 
 class Pipeline:
     """IntelliDoc document processing pipeline"""
@@ -20,6 +22,25 @@ class Pipeline:
         self.vector_store = VectorStore()
         self.router = DocumentRouter()
         self.ocr_extractor = OCRExtractor()  
+        self.retriever = Retriever()
+        self.synthesizer = Synthesizer()
+        self.Evaluator = Evaluator()
+        self.memory: Dict[str, List[Dict]] = {}
+
+    def get_chat_history(self, session_id: str) -> List[Dict]:
+        if not session_id:
+            return []
+        if session_id not in self.memory:
+            self.memory[session_id] = []
+        return self.memory[session_id]
+
+    def add_to_history(self, session_id: str, role: str, content: str):
+        if not session_id:
+            return
+        history = self.get_chat_history(session_id)
+        history.append({"role": role, "content": content})
+        self.memory[session_id] = history[-10:] # retain last 10 messages
+
     
     def process_pdf_page(self, pdf_path: str, page_number: int) -> Dict:
         """
@@ -211,16 +232,101 @@ class Pipeline:
                 "time_taken_ms": (time.time() - start_time) * 1000
             }
 
+    def query_document(self, query: str, top_k: int = 5, ground_truth: Optional[str] = None, session_id: Optional[str] = None) -> Dict:
+        """
+        Process a query against the indexed documents using hybrid search, synthesize an answer,
+        and optionally evaluate the result against a ground truth.
+        
+        Args:
+            query: User query string
+            top_k: Number of results to return as context
+            ground_truth: Optional reference answer to evaluate the prediction against
+            session_id: Optional session ID to enable conversational memory
+        
+        Returns:
+            Dict containing synthesized answer object, source results, and evaluation metrics if evaluated.
+        """
+        start_time = time.time()
+        try:
+            results = self.retriever.process_query(query, top_k)
+            if not results:
+                return {
+                    "status": "error",
+                    "query": query,
+                    "error": "No results found in the database.",
+                    "answer": None,
+                    "results": [],
+                    "eval_results": None,
+                    "time_taken_ms": (time.time() - start_time) * 1000
+                }
+            
+            # Fetch conversation memory
+            history = self.get_chat_history(session_id) if session_id else None
 
-if __name__ == "__main__":
-    import os
+            # Synthesize answer using OpenAI/Qwen LLM passing the chat history
+            answer_obj = self.synthesizer.answer_question(query, results, history)
+            
+            # Save new turn to conversational memory
+            if session_id:
+                self.add_to_history(session_id, role="user", content=query)
+                self.add_to_history(session_id, role="assistant", content=answer_obj.answer)
 
-    pipeline = Pipeline()
-
-    # Resolve path relative to this script's location (src/), not cwd
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    pdf_path = os.path.join(base_dir, "..", "sample_data", "sample_text.pdf")
-
-    result = pipeline.process_pdf_page(pdf_path, page_number=0)
-    print("\n\n")
-    print(result)
+            eval_results = None
+            if ground_truth:
+                # Calculate evaluation metrics
+                eval_results = self.Evaluator.compute_metrics_batch([{
+                    "predicted": answer_obj.answer,
+                    "ground_truth": ground_truth
+                }])
+                
+                # Save the results to evals/results/eval_results_2025.json
+                base_dir = os.path.dirname(os.path.abspath(__file__))
+                eval_file_path = os.path.join(base_dir, "..", "evals", "results", "eval_results_2025.json")
+                
+                # Load existing runs
+                eval_data = []
+                if os.path.exists(eval_file_path):
+                    try:
+                        with open(eval_file_path, "r", encoding="utf-8") as f:
+                            import json as json_lib
+                            eval_data = json_lib.load(f)
+                            if not isinstance(eval_data, list):
+                                eval_data = []
+                    except Exception:
+                        eval_data = []
+                
+                # Append new run
+                eval_data.append({
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "query": query,
+                    "predicted": answer_obj.answer,
+                    "ground_truth": ground_truth,
+                    "metrics": eval_results
+                })
+                
+                # Save back to file
+                os.makedirs(os.path.dirname(eval_file_path), exist_ok=True)
+                with open(eval_file_path, "w", encoding="utf-8") as f:
+                    import json as json_lib
+                    json_lib.dump(eval_data, f, indent=4, ensure_ascii=False)
+            
+            return {
+                "status": "success",
+                "query": query,
+                "answer": answer_obj.dict(),
+                "results": results,
+                "eval_results": eval_results,
+                "total_results": len(results),
+                "time_taken_ms": (time.time() - start_time) * 1000
+            }
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "query": query,
+                "error": str(e),
+                "answer": None,
+                "results": [],
+                "eval_results": None,
+                "time_taken_ms": (time.time() - start_time) * 1000
+            }

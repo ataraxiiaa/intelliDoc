@@ -1,4 +1,7 @@
+version: '3.8'
+
 services:
+  # PostgreSQL with pgvector (aligned to your existing PG16 image)
   db:
     image: pgvector/pgvector:pg16
     container_name: postgres-vector
@@ -11,6 +14,38 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d vectordb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Python API Application
+  api:
+    build: .
+    container_name: intellidoc-api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      # Database connection parameters mapping
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: vectordb
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+      
+      # External Service API Keys
+      OPENROUTER_KEY: ${OPENROUTER_KEY}
+      HF_TOKEN: ${HF_TOKEN}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./sample_data:/app/sample_data
+      - ./evals:/app/evals
+      - ./uploads:/app/uploads
 
 volumes:
   pgdata:

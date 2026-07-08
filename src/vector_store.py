@@ -5,14 +5,22 @@ import numpy as np
 from typing import List, Dict, Any
 
 
+import os
+
 class VectorStore:
     def __init__(self):
+        dbname = os.environ.get("DB_NAME", "vectordb")
+        user = os.environ.get("DB_USER", "myuser")
+        password = os.environ.get("DB_PASSWORD", "mypassword")
+        host = os.environ.get("DB_HOST", "localhost")
+        port = os.environ.get("DB_PORT", "5432")
+
         self.conn = psycopg2.connect(
-            dbname="vectordb",
-            user="myuser",
-            password="mypassword",
-            host="localhost",
-            port="5432"
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
         )
         self.conn.autocommit = False
 
@@ -31,13 +39,19 @@ class VectorStore:
 
     def _cursor(self):
         """Return a fresh cursor (re-opens connection if closed)."""
+        dbname = os.environ.get("DB_NAME", "vectordb")
+        user = os.environ.get("DB_USER", "myuser")
+        password = os.environ.get("DB_PASSWORD", "mypassword")
+        host = os.environ.get("DB_HOST", "localhost")
+        port = os.environ.get("DB_PORT", "5432")
+
         if self.conn.closed:
             self.conn = psycopg2.connect(
-                dbname="vectordb",
-                user="myuser",
-                password="mypassword",
-                host="localhost",
-                port="5432"
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
             )
         return self.conn.cursor()
 

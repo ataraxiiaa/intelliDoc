@@ -1,1 +1,119 @@
-[]
+[
+    {
+        "timestamp": "2026-07-08 16:25:59",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Could not synthesize answer due to a parsing or connection error.",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 3.8124,
+            "rouge1": 0.1212,
+            "rouge2": 0.0645,
+            "rougeL": 0.1212,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:32:07",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Connection error.",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.4354,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:36:34",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Error code: 401 - {'error': {'message': 'Missing Authentication header', 'code': 401}}",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.0,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:37:53",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 1.5733,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:40:30",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Error code: 404 - {'error': {'message': 'This model is unavailable for free. The paid version is available now - use this slug instead: google/gemini-2.5-flash', 'code': 404}, 'user_id': 'user_3GB1KBMc9IDGKJrvTLQmBGrKGGK'}",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.7144,
+            "rouge1": 0.037,
+            "rouge2": 0.0,
+            "rougeL": 0.037,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:41:38",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Expecting value: line 1 column 1 (char 0)",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.0,
+            "rouge1": 0.0667,
+            "rouge2": 0.0,
+            "rougeL": 0.0667,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:43:03",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Error code: 404 - {'error': {'message': 'This model is unavailable for free. The paid version is available now - use this slug instead: meta-llama/llama-3-8b-instruct', 'code': 404}, 'user_id': 'user_3GB1KBMc9IDGKJrvTLQmBGrKGGK'}",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.7144,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:43:47",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "Error: Error code: 404 - {'error': {'message': 'This model is unavailable for free. The paid version is available now - use this slug instead: meta-llama/llama-3-8b-instruct', 'code': 404}, 'user_id': 'user_3GB1KBMc9IDGKJrvTLQmBGrKGGK'}",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 0.7144,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
+    },
+    {
+        "timestamp": "2026-07-08 16:44:15",
+        "query": "What was the revenue and technical achievements in Q3?",
+        "predicted": "In Q3 2024, the company's cloud infrastructure experienced significant growth and total revenue reached $1.2 billion.[1][2]",
+        "ground_truth": "Total revenue reached $1.2 billion and core databases were migrated to a distributed multi-region cluster with under 15ms latency.",
+        "metrics": {
+            "bleu_score": 15.3374,
+            "rouge1": 0.3415,
+            "rouge2": 0.2564,
+            "rougeL": 0.2927,
+            "total_evaluated": 1
+        }
+    }
+]

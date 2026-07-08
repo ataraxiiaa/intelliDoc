@@ -1,0 +1,24 @@
+# Standard packages for intelliDoc pipeline
+psycopg2-binary>=2.9.9
+sentence-transformers>=3.3.0
+pdfplumber>=0.11.0
+pypdf>=5.0.0
+evaluate>=0.4.0
+sacrebleu>=2.4.0
+rouge-score>=0.1.2
+openai>=1.0.0
+transformers>=4.40.0
+pdf2image>=1.17.0
+reportlab>=4.1.0
+torch>=2.2.0
+torchvision>=0.17.0
+numpy>=1.26.4
+langchain-text-splitters>=0.2.0
+fastapi>=0.110.0
+uvicorn>=0.28.0
+python-multipart>=0.0.9
+paddleocr==2.9.1
+paddlepaddle==2.6.2
+pandas>=2.2.0
+Pillow>=10.0.0
+pydantic>=2.0.0
