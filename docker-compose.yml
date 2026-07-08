@@ -38,6 +38,9 @@ services:
       # External Service API Keys
       OPENROUTER_KEY: ${OPENROUTER_KEY}
       HF_TOKEN: ${HF_TOKEN}
+      
+      # Python Path setting for module imports
+      PYTHONPATH: /app/src
     depends_on:
       db:
         condition: service_healthy

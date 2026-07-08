@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from openai import OpenAI
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 from transformers import AutoTokenizer
 

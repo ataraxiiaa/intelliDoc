@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install system dependencies (including poppler-utils for pdf2image PDF rendering)
 RUN apt-get update && apt-get install -y \
-    libpq-dev gcc poppler-utils \
+    libpq-dev gcc poppler-utils libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install

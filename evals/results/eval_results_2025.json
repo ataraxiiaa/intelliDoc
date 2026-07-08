@@ -115,5 +115,18 @@
             "rougeL": 0.2927,
             "total_evaluated": 1
         }
+    },
+    {
+        "timestamp": "2026-07-08 14:39:08",
+        "query": "what name is there in the document",
+        "predicted": "Error: Error code: 401 - {'error': {'message': 'Missing Authentication header', 'code': 401}}",
+        "ground_truth": "string",
+        "metrics": {
+            "bleu_score": 0.0,
+            "rouge1": 0.0,
+            "rouge2": 0.0,
+            "rougeL": 0.0,
+            "total_evaluated": 1
+        }
     }
 ]

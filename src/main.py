@@ -4,7 +4,7 @@ import pypdf
 from fastapi import FastAPI, HTTPException, Query, File, UploadFile
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from src.pipeline import Pipeline
+from pipeline import Pipeline
 
 app = FastAPI(
     title="IntelliDoc IDP Pipeline API",
